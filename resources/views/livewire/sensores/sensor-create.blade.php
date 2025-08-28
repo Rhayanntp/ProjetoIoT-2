@@ -1,90 +1,73 @@
+<div style="margin-top: 25px; margin-bottom: 75px" class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg p-4 rounded-4 w-100" style="max-width: 600px;">
+        <h3 class="text-success text-center mb-4">
+            <i class="bi bi-pencil-square me-2"></i>Criar Sensor
+        </h3>
 
-    <div class="container mt-5">
-<h1 class="text-3xl font-bold mb-6 flex items-center gap-3">
-<i class="bi bi-person-plus text-green-600"></i>
+        @if (session()->has('success'))
+            <div class="alert alert-success d-flex align-items-center" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <div>{{ session('success') }}</div>
+            </div>
+        @endif
 
-          Criar Funcionário
-</h1>
- 
-      @if (session()->has('message'))
-<div class="alert alert-success">{{ session('message') }}</div>
+        <form wire:submit.prevent="store">
 
-      @endif
- 
-      <form wire:submit.prevent="store" class="needs-validation" novalidate>
-<div class="mb-3">
-<span style="font-size:20px">
-<label for="codigo" class="form-label">codigo</label>
-<i class="bi bi-person-fill "></i>
-</span>
-<input type="text" id="codigo" wire:model.defer="codigo"
+            <div class="mb-3">
+                <label class="form-label">Id do Ambiente</label>
+                <select class="form-select" id="ambiente_id" wire:model.defer="ambiente">
+                    <option hidden>Selecione seu Ambiente</option>
+                    @foreach ($ambientes as $ambiente)
+                        <option value="{{$ambiente->id}}">{{$ambiente->nome}}</option>
+                    @endforeach
+                </select>
+                @error('ambiente_id') <span class="text-danger small">{{ $message }}</span> @enderror
+            </div>
 
-                  class="form-control @error('codigo') is-invalid @enderror" />
+            <div class="mb-3">
+                <label class="form-label">codigo</label>
+                <input type="codigo" wire:model="codigo" class="form-control" required>
+                @error('codigo') <span class="text-danger small">{{ $message }}</span> @enderror
+            </div>
 
-              @error('codigo')
-<div class="invalid-feedback">{{ $message }}</div>
+            <div class="mb-3">
+                <label class="form-label">tipo</label>
+                <input type="text" wire:model="tipo" class="form-control" required>
+                @error('tipo') <span class="text-danger small">{{ $message }}</span> @enderror
+            </div>
 
-              @enderror
+            <div class="mb-3">
+                <label class="form-label">descricao</label>
+                <input type="descricao" wire:model="descricao" class="form-control" required>
+                @error('descricao') <span class="text-danger small">{{ $message }}</span> @enderror
+            </div>
+
+        <div class="mb-3">
+                <label for="status" class="form-label">status</label>
+
+                <select class="form-select @error('status') is-invalid @enderror" id="status" wire:model.defer="status">
+                    <option hidden> </option>
+                    <option value=1>ativo</option>
+                    <option value=0>inativo</option>
+                </select>
+
+                @error('status')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">
+                <i class="bi bi-save2 me-2"></i>Cadastrar
+            </button>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a href="{{ route('sensors.list') }}" class="btn btn-success text-white  px-4 w-100">
+                    <i style="color: white" class="bi bi-arrow-left-circle"></i> Voltar
+                </a>
+            </div>
+           
+               
+            
+        </form>
+    </div>
 </div>
- 
-          <div class="mb-3">
-<span style="font-size:20px">
-<label for="cpf" class="form-label">tipo</label>
-<i class="bi bi-person-vcard-fill"></i>
-</span>
-<input type="text" id="cpf" wire:model.defer="cpf"
-
-                  class="form-control @error('cpf') is-invalid @enderror" />
-
-              @error('cpf')
-<div class="invalid-feedback">{{ $message }}</div>
-
-              @enderror
-</div>
- 
-          <div class="mb-3">
-<span style="font-size:20px">
-<label for="cargo" class="form-label">descricao</label>
-<i class="bi bi-briefcase-fill"></i>
-</span>
- 
-              <select class="form-select" aria-label="default-select example"@error('cargo') is-invalid @enderror
-
-                  id="cargo" wire:model.defer="cargo" placeholder="Insira Seu Cargo">
-<option hidden>Selecione Seu Cargo</option>
-<option value="1">professor</option>
-<option value="2">secretaria</option>
-</select>
-
-              @error('cargo')
-<div class="invalid-feedback">{{ $message }}</div>
-
-              @enderror
-</div>
- 
-          <div class="mb-3">
-<span style="font-size:20px">
-<label for="status" class="form-label">status</label>
-<i class="bi bi-mortarboard-fill"></i>
-</span>
-
-<select class="form-select" aria-label="default-select example"@error('status') is-invalid @enderror
-id="status" wire:model.defer="status" placeholder="Insira seu status">
-                <option hidden>Selecione Seu status</option>
-                <option value="0">Inativo</option>
-                <option value="1">Ativo</option>
-
-</select>
-@error('status')
-<div class="invalid-feedback">{{ $message }}</span>
-
-              @enderror
-</div>
-
- 
- 
-          <button type="submit" class="btn btn-success">Cadastrar</button>
-<a href="{{ route('sensor.create') }}" class="btn btn-secondary ms-2">Cancelar</a>
-</form>
-</div>
- 

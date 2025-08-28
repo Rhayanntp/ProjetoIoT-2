@@ -1,85 +1,84 @@
 <?php
-
+ 
 namespace App\Livewire\Sensores;
 
+use App\Models\Ambiente;
 use App\Models\Sensor;
 use Livewire\Component;
-
+ 
 class SensorEdit extends Component
 {
-
-    public $ambiente_id;
+ 
+    public $sensorId;
+    public $ambiente;
     public $codigo;
     public $tipo;
     public $descricao;
     public $status;
-
-    protected function rules ()
+ 
+ 
+    protected function rules()
     {
         return [
-            'ambiente_id' => 'required|integer',
-            'codigo' => 'required|string|unique:sensor,codigo',
-            'tipo' => 'required|string|',
-            'descricao' => 'required|text',
-            'status' =>'boolean',
+            'codigo' => 'max:255',
+            'tipo' => 'max:255',
+            'descricao' => 'max:255',
+ 
         ];
     }
-        
-    
-
-    protected $messages = [
-        'ambiente_id.required' => 'É Necessario o ID do anbiente',
-        'ambiente_id.integer' => 'O campo ID tem que ser do tipo inteiro',
-
-      'codigo,required' => 'É Necessario o codigo',
-        'codigo.string' => 'O campo codigo tem q ser um texto Válido',
-        'codigo.unique' => 'Este codigo já está cadastrado.',
  
-        'tipo,required' => 'É Necessario o tipo do sensor',
-        'tipo.string' => 'O campo tipo tem q ser um texto Válido',
+    protected $messages = [
+      
+ 
+      
+       'codigo.max' => 'O maximo de caracteres é de 255',
+ 
+        'tipo.max' => 'o maximo de caracteres é de 255',
  
         'descricao.required' => 'A descrição é necessaria',
-        'descricao.text' => 'O campo descrição tem q ser um texto Válido',
        
-        'status.boolean' => 'Apenas os valores true e false são permitidos.'
     ];
-
+ 
     public function mount($id)
     {
-       $sensor = Sensor::find($id);
+        $sensor = Sensor::find($id);
         if ($sensor == null) {
             session()->flash('error', 'Sensor Não Encontrado');
-            return redirect()->route('Sensor.list');
+            return redirect()->route('sensors.list');
         } else {
-            $this->ambiente_id = $sensor->ambiente_id;
+            $this->sensorId = $sensor->id;
+            $this->ambiente = $sensor->ambiente_id;
             $this->codigo = $sensor->codigo;
             $this->tipo = $sensor->tipo;
             $this->descricao = $sensor->descricao;
             $this->status = $sensor->status;
         }
     }
-    
-
-    public function update()
+ 
+    public function save()
     {
-
         $this->validate();
 
         $sensor = Sensor::find($this->sensorId);
-        
-        $sensor->update([
-            'codigo' => $this->codigo,
-            'tipo' => $this->tipo,
-            'descricao' => $this->descricao,
-            'status' => $this->status,
-        ]);
-
-         session()->flash('message', 'Sensor criado com suceso.');
-            return redirect()->route('Sensor.List');
+       
+ 
+        $sensor->ambiente_id = $this->ambiente;
+        $sensor->descricao = $this->descricao;
+        $sensor->codigo = $this->codigo;
+        $sensor->tipo = $this->tipo;
+        $sensor->status = $this->status;
+        $sensor->save();
+ 
+       
+ 
+        session()->flash('message', 'Sensor atualizado com sucesso');
+        return redirect()->route('sensors.list');
     }
-
+ 
     public function render()
     {
-        return view('livewire.sensores.sensor-edit');
+        $ambientes = Ambiente::all();
+        return view('livewire.sensores.sensor-edit', compact('ambientes'));
     }
 }
+ 
