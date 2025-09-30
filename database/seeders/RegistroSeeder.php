@@ -29,10 +29,15 @@ class RegistroSeeder extends Seeder
         $dataAtual = Carbon::now('America/Sao_Paulo')->subMonth();
         $dataFinal = Carbon::now('America/Sao_Paulo');
 
-        while ($dataAtual->lessThanOrEqualTo($dataFinal)) {
-            foreach ($sensores as $sensor) {
-                $tipo = $sensor->tipo;
+        $count = 0; // Inicializa o contador
 
+        while ($dataAtual->lessThanOrEqualTo($dataFinal) && $count < 60) {
+            foreach ($sensores as $sensor) {
+                if($count >= 100){
+                    break 2;
+                }
+                $tipo = $sensor->tipo;
+                
                 $unidade = $unidadesPorTipo[$tipo] ?? '';
 
                 switch ($tipo) {

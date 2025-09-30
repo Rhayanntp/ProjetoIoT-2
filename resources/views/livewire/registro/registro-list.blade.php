@@ -61,7 +61,7 @@
         </tbody>
     </table>
 
-    <div class="mt-5">
+    <div class="mt-5 d-flex flex-direction align-items">
         {{$registros->links()}}
     </div>
 

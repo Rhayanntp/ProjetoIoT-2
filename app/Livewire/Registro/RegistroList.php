@@ -8,8 +8,10 @@ use Livewire\WithPagination;
 
 class RegistroList extends Component
 {
-
     use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
+
     public $search ='';
     public $perPage = 15;
  
