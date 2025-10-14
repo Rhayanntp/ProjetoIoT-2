@@ -15,11 +15,12 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @elseif (session()->has('message'))
+        {{-- MENSAGEM DO TOGGLE APARECE AQUI --}}
         <div class="alert alert-success">{{ session('message') }}</div>
     @endif
- 
+
     <div class="d-flex flex-row justify-content-start">
- 
+
         <input type="text" class="form-control flex-item justify-content-start" id="search"
             placeholder="Buscar sensores..." wire:model.live="search" />
         <div class="flex-item col-md-3 ms-2">
@@ -32,8 +33,8 @@
             </select>
         </div>
     </div>
- 
- 
+
+
     <table class="table table-striped table-hover align-middle mt-3">
         <thead class="table-primary">
             <tr>
@@ -42,7 +43,7 @@
                 <th>Tipo</th>
                 <th>Descrição</th>
                 <th>Codigo</th>
-                <th>Status</th>
+                <th>Status (Controle)</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -54,10 +55,22 @@
                     <td>{{ $s->tipo }}</td>
                     <td>{{ $s->descricao }}</td>
                     <td>{{ $s->codigo }}</td>
-                    <td>{{ $s->status == 1 ? 'Ativo' : 'Inativo' }}</td>
+                    <td>
+                        <div class="form-check form-switch d-flex align-items-center m-8">
+                            <input class="form-check-input" type="checkbox" role="switch"
+                                id="sensorSwitch{{ $s->id }}" wire:click="toggleStatus({{ $s->id }})"
+                                {{ $s->status == 1 ? 'checked' : '' }}>
+                            <label class="form-check-label ms-2" for="sensorSwitch{{ $s->id }}">
+                                {{ $s->status == 1 ? 'Ligado' : 'Desligado' }}
+                            </label>
+                        </div>
+                    </td>
                     <td>
                         <a href="{{ route('sensors.edit', $s->id) }}" class="btn btn-sm btn-warning" title="Editar">
                             <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="{{ route('sensors.delete', $s->id) }}" class="btn btn-sm btn-danger" title="Excluir">
+                            <i class="bi bi-trash3-fill"></i>
                         </a>
                     </td>
                 </tr>
@@ -68,13 +81,13 @@
             @endforelse
         </tbody>
     </table>
- 
+
     <div class="d-flex flex-column align-items-center mt-3">
         <div class="mb-2">
             Mostrando {{ $sensors->firstItem() }} até {{ $sensors->lastItem() }} de
             {{ $sensors->total() }} resultados
         </div>
- 
+
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 {{-- Link Anterior --}}
@@ -83,7 +96,7 @@
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
- 
+
                 {{-- Links das páginas --}}
                 @foreach ($sensors->getUrlRange(1, $sensors->lastPage()) as $page => $url)
                     <li class="page-item {{ $sensors->currentPage() == $page ? 'active' : '' }}">
@@ -91,7 +104,7 @@
                             wire:click.prevent="gotoPage({{ $page }})">{{ $page }}</a>
                     </li>
                 @endforeach
- 
+
                 {{-- Link Próximo --}}
                 <li class="page-item {{ $sensors->hasMorePages() ? '' : 'disabled' }}">
                     <a href="#" class="page-link" wire:click.prevent="nextPage" aria-label="Next">
@@ -100,7 +113,7 @@
                 </li>
             </ul>
         </nav>
- 
- 
+
+
     </div>
 </div>

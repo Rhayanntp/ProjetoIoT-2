@@ -9,16 +9,14 @@ use Illuminate\Http\Request;
 
 class RegistroController extends Controller
 {
-    //public function index(){
-    //    $registro = Registro::orderBy('id');
-    //}
-
     public function store(RegistroRequest $request){
+
         $sensor = Sensor::where('codigo', $request->cod_sensor)->first();
 
         if(!$sensor){
-            return response()->json(['error'=> 'sensor não encontrado'],404);
+            return response()->json(['error' => 'sensor nao encontrado'], 404);
         }
+
 
         $registro = Registro::create([
             'sensor_id' => $sensor->id,
@@ -28,8 +26,13 @@ class RegistroController extends Controller
         ]);
 
         return response()->json([
-            'succss' => 'registro salvo com sucesso',
-            'data' => $registro 
+            'success' => 'registro salvo com sucesso',
+            'data' => $registro
         ]);
+    }
+
+    public function index(){
+        $registros = Registro::orderBy('id', 'desc')->get();
+        return response()->json($registros,200);
     }
 }

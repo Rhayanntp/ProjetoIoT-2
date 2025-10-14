@@ -14,8 +14,7 @@ Route::get('/', Dashboard::class);
 use App\Livewire\Ambiente\AmbienteCreate;
 use App\Livewire\Ambiente\AmbienteEdit;
 use App\Livewire\Ambiente\AmbienteList;
-
-
+use App\Livewire\Sensores\SensorDelete;
 
 Route::prefix('ambiente')->group(function () {
     Route::get('/', AmbienteList::class)->name('ambiente.list');
@@ -27,6 +26,7 @@ Route::prefix('ambiente')->group(function () {
 Route::get('/sensor/create', SensorCreate::class)->name('sensors.create');
 Route::get('/sensor/list', SensorList::class)->name('sensors.list');
 Route::get('/sensor/{id}/edit', SensorEdit::class)->name('sensors.edit');
+Route::get('/sensor/{id}/delete',SensorDelete::class)->name('sensors.delete');
 
 use App\Livewire\Registro\RegistroList;
 
