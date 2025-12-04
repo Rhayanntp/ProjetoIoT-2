@@ -12,7 +12,20 @@ class AmbienteEdit extends Component
     public $descricao;
     public $status;
     public $ambiente;
-    public $ambienteId;    
+    public $ambienteId;  
+    
+    public function rules()
+    {
+        return [
+            'nome' => 'required',
+            'status' => 'boolean'
+        ];
+    }
+
+    protected $messages = [
+        'nome.required' => 'Campo Nome é Obrigatório',
+        'status.boolean' => 'Determine o Status do Sensor'
+    ];
     
     public function mount($id){
         $ambiente = Ambiente::find($id);
@@ -27,6 +40,8 @@ class AmbienteEdit extends Component
     }
 
     public function update() { 
+
+        $this->validate();
 
         $ambiente = Ambiente::find($this->ambienteId);
 

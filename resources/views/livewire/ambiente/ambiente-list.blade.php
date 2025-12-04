@@ -62,6 +62,8 @@
                             <i class="bi bi-pencil"></i>
                         </a>
 
+                        <a href="{{ route('ambiente.delete', $ambiente->id) }}" class="btn btn-sm btn-danger">Excluir</a>
+
                     </td>
                 </tr>
             @empty
